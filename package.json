@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "pm2": "^4.4.0",
+    "websocket": "^1.0.31"
+  }
+}
