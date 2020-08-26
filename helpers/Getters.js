@@ -8,7 +8,7 @@ function parse(input) {
   }
 
   let responseData = null;
-  
+
   if (Buffer.isBuffer(input)) {
     input = input.toString();
   }

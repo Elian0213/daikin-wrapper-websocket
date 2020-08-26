@@ -23,11 +23,12 @@ wsServer = new wsServer({
   autoAcceptConnections: false
 });
 
-function originIsAllowed(origin) { 
+function originIsAllowed(origin) {
   return true;
 }
 
 wsServer.on('request', (request) => {
+  console.log(request);
   const connection = request.accept(null, request.origin);
   console.log(`${new Date()} New connection`)
 
@@ -60,7 +61,7 @@ wsServer.on('request', (request) => {
           type: 'sendTemperature',
           temperature: `${acSettings.stemp} °C`,
         };
-  
+
         connection.sendUTF(JSON.stringify(data));
       });
     } else {

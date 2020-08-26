@@ -29,7 +29,7 @@ Daikin.inreaseTemperature = () => {
   })
 }
 
-Daikin.decreaseTemperature = () => { 
+Daikin.decreaseTemperature = () => {
   getters.sensorInfo()
   .then((sensorInfo) => {
     getters.info().then((acSettings) => {
@@ -45,7 +45,7 @@ Daikin.decreaseTemperature = () => {
 
 Daikin.updateInfo = (pow, mode, stemp, shum, f_rate, f_dir) => {
   pow = pow ? 1 : 0;
-  axios.get(`${config.ip}/aircon/set_control_info?pow=${pow}&mode=${mode}&stemp=${stemp}&shum=${shum}&f_rate=${f_rate}&f_dir=${f_dir}`)
+  axios.get(`${process.env.DAIKIN_IP}/aircon/set_control_info?pow=${pow}&mode=${mode}&stemp=${stemp}&shum=${shum}&f_rate=${f_rate}&f_dir=${f_dir}`)
   .then((resp) => {
     console.log(`${new Date()} ${resp.data}`);
   })
