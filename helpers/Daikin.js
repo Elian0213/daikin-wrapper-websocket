@@ -48,6 +48,8 @@ Daikin.updateInfo = (pow, mode, stemp, shum, f_rate, f_dir) => {
   axios.get(`http://${process.env.DAIKIN_IP}/aircon/set_control_info?pow=${pow}&mode=${mode}&stemp=${stemp}&shum=${shum}&f_rate=${f_rate}&f_dir=${f_dir}`)
   .then((resp) => {
     console.log(`${new Date()} ${resp.data}`);
+    // Force update power button
+    sendPowerStatus(0);
   })
 }
 
