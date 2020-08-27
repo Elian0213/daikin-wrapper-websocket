@@ -28,7 +28,6 @@ function originIsAllowed(origin) {
 }
 
 wsServer.on('request', (request) => {
-  console.log(request);
   const connection = request.accept(null, request.origin);
   console.log(`${new Date()} New connection`)
 
@@ -46,6 +45,7 @@ wsServer.on('request', (request) => {
         Daikin.togglePower()
       case 'updateTemperatureDisplay':
         sendTemperature()
+        sendPowerStatus()
         break
       default:
         console.log(`invalid ${data.utf8Data}`)
@@ -71,6 +71,25 @@ wsServer.on('request', (request) => {
       };
 
       connection.sendUTF(JSON.stringify(data));
+      sendPowerStatus(1)
+    }
+
+    sendPowerStatus()
+  }
+
+  global.sendPowerStatus = async (value) => {
+    if (value === undefined) {
+      const acInfo = await getters.info();
+
+      connection.sendUTF(JSON.stringify({
+        type: 'sendPowerStatus',
+        powerStatus: Number(acInfo.pow),
+      }));
+    } else {
+      connection.sendUTF(JSON.stringify({
+        type: 'sendPowerStatus',
+        powerStatus: value,
+      }));
     }
   }
 
