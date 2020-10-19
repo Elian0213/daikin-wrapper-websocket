@@ -1,27 +1,40 @@
 # Daikin API Wrapper
 This was originally written for my Streamdeck Plugin that I made to control my AC with, but I figured it could be used in many use cases and applications.
 
-# Setup
-Copy  ``.env.example`` and rename it to ``.env`` and change the **IP** to the IP of your **Daikin AC**
-````
-# PORT The websocket will run on
-PORT=3000
+## Setup
 
-# The IP of your Daikin AC
-DAIKIN_IP=192.168.0.1 
-````
+### Config
+Copy  ``config.example.json`` and rename it to ``config.json`` and change the **IP** to the IP of your **Daikin AC**
+
+
+```json
+{
+    // The port the websocket will run on
+    "websocketPort": 3000,
+
+    // The IP Adress of your Daikin AC wifi module
+    "daikinIP": "192.168.0.1"
+}
+```
+
+### Run
 
 After that you need to install all the packages
 ````bash
 # If you use yarn
 yarn
+
 # Or if you're oldschool
 npm i
 ````
 
 After all that you can run the script by typing
-````
-node index.js
+````bash
+# If you use yarn
+yarn dev
+
+# Or if you're oldschool
+npm run dev
 ````
 
 # Install Node

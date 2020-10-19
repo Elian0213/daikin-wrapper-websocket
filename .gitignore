@@ -1,4 +1,4 @@
-.env
+config.json
 node_modules
 .vs
 yarn.lock

@@ -1,6 +1,6 @@
 function parse(input) {
   function escapeRegExp(str) {
-    return str.replace(/([.*+?^=!:${}()|\[\]\/\\]\")/g, "\\$1");
+    return str.replace(/([.*+?^=!:${}()|\[\]\/\\]\")/g, '\\$1');
   }
 
   function replaceAll(str, find, replace) {
@@ -14,7 +14,7 @@ function parse(input) {
   }
 
   try {
-    responseData = JSON.parse("{\"" + replaceAll(replaceAll(input, "\=", "\":\""), ",", "\",\"") + "\"}");
+    responseData = JSON.parse(`{"${replaceAll(replaceAll(input, '\=', '":"'), ',', '","')}"}`);
   } catch (e) {
     return 'Cannot parse response';
   }
@@ -23,16 +23,14 @@ function parse(input) {
 }
 
 module.exports = {
-  info: async () => {
-    return await axios.get(`http://${process.env.DAIKIN_IP}/aircon/get_control_info`)
-      .then((data) => {
-        const response = parse(data.data);
+  info: async () => await axios.get(`http://${process.env.DAIKIN_IP}/aircon/get_control_info`)
+    .then((data) => {
+      const response = parse(data.data);
 
-        return response;
-      })
-  },
-  sensorInfo: async () => {
-    return await axios.get(`http://${process.env.DAIKIN_IP}/aircon/get_sensor_info`)
+      return response;
+    }),
+
+  sensorInfo: async () => await axios.get(`http://${process.env.DAIKIN_IP}/aircon/get_sensor_info`)
     .then((data) => {
       const response = parse(data.data);
 
@@ -43,6 +41,5 @@ module.exports = {
     })
     .catch((err) => {
       console.log(err);
-    })
-  },
-}
+    }),
+};
