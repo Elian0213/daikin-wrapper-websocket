@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -46,34 +49,67 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var tsyringe_1 = require("tsyringe");
-var daikin_service_1 = require("../services/daikin-service");
-var RequestController = /** @class */ (function () {
-    function RequestController(daikinService) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars-experimental
+var Websocket = require("ws");
+var message_service_1 = require("../services/message-service");
+var MessageController = /** @class */ (function () {
+    function MessageController(connection, messageService) {
         var _this = this;
-        this.onMessage = function (data) { return __awaiter(_this, void 0, void 0, function () {
-            var actData;
+        this.badRequest = function () {
+            _this.socket.send(JSON.stringify({
+                status: 400,
+                message: 'Invalid request'
+            }));
+        };
+        this.validRequest = function (request) {
+            try {
+                var data = JSON.parse(request);
+                if (data === null || data === void 0 ? void 0 : data.name)
+                    return true;
+            }
+            catch (_a) {
+                return false;
+            }
+            return false;
+        };
+        this.onMessage = function (message) { return __awaiter(_this, void 0, void 0, function () {
+            var data, request;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log("Message received " + new Date());
-                        return [4 /*yield*/, this.daikinService.getInfo()];
-                    case 1:
-                        actData = _a.sent();
-                        console.log(actData);
-                        console.log(data);
-                        return [2 /*return*/];
+                data = message;
+                if (!this.validRequest(data)) {
+                    console.log("[Daikin] Invalid JSON format: " + data);
+                    this.badRequest();
+                    return [2 /*return*/];
                 }
+                request = JSON.parse(data);
+                if (!this.actions.includes(request.name)) {
+                    console.log("[Daikin] Invalid request type: " + data);
+                    this.badRequest();
+                    return [2 /*return*/];
+                }
+                this.messageService.handleRequest(request, this.socket);
+                return [2 /*return*/];
             });
         }); };
-        this.onClose = function () {
-            console.log("[Socket] Connection closed " + new Date());
-        };
-        this.daikinService = daikinService;
+        this.socket = connection;
+        this.messageService = messageService;
+        this.actions = [
+            /**
+             * Getters
+             */
+            'getInfo',
+            'getSensorInfo',
+            /**
+             * Setters
+             */
+            'setData',
+        ];
     }
-    RequestController = __decorate([
+    MessageController = __decorate([
         tsyringe_1.autoInjectable(),
-        __metadata("design:paramtypes", [daikin_service_1["default"]])
-    ], RequestController);
-    return RequestController;
+        __param(0, tsyringe_1.inject('Socket')),
+        __metadata("design:paramtypes", [Websocket, message_service_1["default"]])
+    ], MessageController);
+    return MessageController;
 }());
-exports["default"] = RequestController;
+exports["default"] = MessageController;

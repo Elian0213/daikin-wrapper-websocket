@@ -47,22 +47,13 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 var tsyringe_1 = require("tsyringe");
 var daikin_service_1 = require("../services/daikin-service");
-var RequestController = /** @class */ (function () {
-    function RequestController(daikinService) {
+var EventController = /** @class */ (function () {
+    function EventController(daikinService) {
         var _this = this;
-        this.onMessage = function (data) { return __awaiter(_this, void 0, void 0, function () {
-            var actData;
+        this.onOpen = function () { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log("Message received " + new Date());
-                        return [4 /*yield*/, this.daikinService.getInfo()];
-                    case 1:
-                        actData = _a.sent();
-                        console.log(actData);
-                        console.log(data);
-                        return [2 /*return*/];
-                }
+                console.log("[Socket] Connection opened " + new Date());
+                return [2 /*return*/];
             });
         }); };
         this.onClose = function () {
@@ -70,10 +61,10 @@ var RequestController = /** @class */ (function () {
         };
         this.daikinService = daikinService;
     }
-    RequestController = __decorate([
+    EventController = __decorate([
         tsyringe_1.autoInjectable(),
         __metadata("design:paramtypes", [daikin_service_1["default"]])
-    ], RequestController);
-    return RequestController;
+    ], EventController);
+    return EventController;
 }());
-exports["default"] = RequestController;
+exports["default"] = EventController;

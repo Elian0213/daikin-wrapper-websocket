@@ -41,7 +41,8 @@ var tsyringe_1 = require("tsyringe");
 var Websocket = require("ws");
 var config_service_1 = require("./services/config-service");
 // Controllers
-var request_controller_1 = require("./controllers/request-controller");
+var message_controller_1 = require("./controllers/message-controller");
+var event_controller_1 = require("./controllers/event-controller");
 // Entry point for the app.
 var mainAsync = function () { return __awaiter(void 0, void 0, void 0, function () {
     var config, server;
@@ -49,12 +50,12 @@ var mainAsync = function () { return __awaiter(void 0, void 0, void 0, function 
         config = new config_service_1["default"]().loadConfigFromPath('./config.json');
         tsyringe_1.container.register('Config', { useValue: config });
         server = new Websocket.Server({ port: config.websocketPort });
-        server.on('open', function () {
-            console.log(new Date() + " New connection");
-        });
+        console.log("[Socket] Running on port: " + config.websocketPort);
+        server.on('connection', tsyringe_1.container.resolve(event_controller_1["default"]).onOpen);
         server.on('connection', function (socket) {
-            socket.on('message', tsyringe_1.container.resolve(request_controller_1["default"]).onMessage);
-            socket.on('close', tsyringe_1.container.resolve(request_controller_1["default"]).onClose);
+            tsyringe_1.container.register('Socket', { useValue: socket });
+            socket.on('message', tsyringe_1.container.resolve(message_controller_1["default"]).onMessage);
+            socket.on('close', tsyringe_1.container.resolve(event_controller_1["default"]).onClose);
         });
         return [2 /*return*/];
     });

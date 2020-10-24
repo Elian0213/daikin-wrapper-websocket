@@ -4,10 +4,11 @@ import { container } from 'tsyringe';
 import * as Websocket from 'ws';
 
 import ConfigService from './services/config-service';
+import { IController, IEventController } from './types/controller';
 
 // Controllers
-import RequestController from './controllers/request-controller';
-import { IController } from './types/controller';
+import MessageController from './controllers/message-controller';
+import EventController from './controllers/event-controller';
 
 // Entry point for the app.
 const mainAsync = async () => {
@@ -18,14 +19,16 @@ const mainAsync = async () => {
 
   const server = new Websocket.Server({ port: config.websocketPort });
 
-  server.on('open', () => {
-    console.log(`${new Date()} New connection`);
-  });
+  console.log(`[Socket] Running on port: ${config.websocketPort}`);
+
+  server.on('connection', container.resolve<IEventController>(EventController).onOpen);
 
   server.on('connection', (socket) => {
-    socket.on('message', container.resolve<IController>(RequestController).onMessage);
+    container.register('Socket', { useValue: socket });
 
-    socket.on('close', container.resolve<IController>(RequestController).onClose);
+    socket.on('message', container.resolve<IController>(MessageController).onMessage);
+
+    socket.on('close', container.resolve<IEventController>(EventController).onClose);
   });
 };
 

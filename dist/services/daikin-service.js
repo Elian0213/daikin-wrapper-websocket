@@ -68,9 +68,33 @@ var DaikinService = /** @class */ (function () {
             }
             return JSON.parse("{\"" + replaceAll(replaceAll(input, '=', '":"'), ',', '","') + "\"}");
         };
+        this.postInfo = function (data) { return __awaiter(_this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                return [2 /*return*/, axios_1["default"]
+                        .get("http://" + this.config.daikinIP + "/aircon/set_control_info?pow=" + data.pow + "&mode=" + data.mode + "&stemp=" + data.stemp + "&shum=" + data.shum + "&f_rate=" + data.f_rate + "&f_dir=" + data.f_dir)
+                        .then(function (resp) {
+                        console.log(new Date() + " " + resp.data);
+                        return {
+                            status: 200,
+                            message: 'AC Data updated'
+                        };
+                    })["catch"](function () {
+                        console.log("[Daikin] Couldn't POST, are you sure " + _this.config.daikinIP + " is the IP of your AC?");
+                        process.exit();
+                    })
+                    /**
+                     * This is to obtain AC settings like,
+                     * power status, heating/cooling mode etc..
+                     * @type controlInfo
+                     */
+                ];
+            });
+        }); };
         /**
          * This is to obtain AC settings like,
          * power status, heating/cooling mode etc..
+         * @type controlInfo
          */
         this.getInfo = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;
@@ -85,6 +109,7 @@ var DaikinService = /** @class */ (function () {
                     /**
                      * Obtain sensor information like
                      * Temperature inside & outside :D
+                     * @type sensorInfo
                      */
                 ];
             });
@@ -92,6 +117,7 @@ var DaikinService = /** @class */ (function () {
         /**
          * Obtain sensor information like
          * Temperature inside & outside :D
+         * @type sensorInfo
          */
         this.getTemperature = function () { return __awaiter(_this, void 0, void 0, function () {
             var _this = this;

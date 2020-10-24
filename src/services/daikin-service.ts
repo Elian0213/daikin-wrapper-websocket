@@ -27,9 +27,25 @@ export default class DaikinService {
     return JSON.parse(`{"${replaceAll(replaceAll(input, '=', '":"'), ',', '","')}"}`);
   }
 
+  postInfo = async (data: postInfoData): Promise<unknown> => Axios
+    .get(`http://${this.config.daikinIP}/aircon/set_control_info?pow=${data.pow}&mode=${data.mode}&stemp=${data.stemp}&shum=${data.shum}&f_rate=${data.f_rate}&f_dir=${data.f_dir}`)
+    .then((resp) => {
+      console.log(`${new Date()} ${resp.data}`);
+
+      return {
+        status: 200,
+        message: 'AC Data updated',
+      };
+    })
+    .catch(() => {
+      console.log(`[Daikin] Couldn't POST, are you sure ${this.config.daikinIP} is the IP of your AC?`);
+      process.exit();
+    })
+
   /**
    * This is to obtain AC settings like,
    * power status, heating/cooling mode etc..
+   * @type controlInfo
    */
   getInfo = async (): Promise<controlInfo|unknown> => Axios
     .get(`http://${this.config.daikinIP}/aircon/get_control_info`)
@@ -43,8 +59,9 @@ export default class DaikinService {
   /**
    * Obtain sensor information like
    * Temperature inside & outside :D
+   * @type sensorInfo
    */
-  getTemperature = async (): Promise<unknown> => Axios
+  getTemperature = async (): Promise<sensorInfo|unknown> => Axios
     .get(`http://${this.config.daikinIP}/aircon/get_sensor_info`)
     .then((data: { data: string }) => this.convertData(data.data))
     .catch(() => {
