@@ -1,8 +1,40 @@
 {
+  "name": "daikin-wrapper-websocket",
+  "author": "Elian0213",
+  "license": "AGPL-3.0",
+  "version": "0.0.1",
+  "description": "Websocket to control Daikin AC",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "dev": "tsc && node dist/app"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Elian0213/daikin-wrapper-websocket.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Elian0213/daikin-wrapper-websocket/issues"
+  },
+  "homepage": "https://github.com/Elian0213/daikin-wrapper-websocket#readme",
+  "devDependencies": {
+    "@types/node": "^14.11.1",
+    "@typescript-eslint/eslint-plugin": "^4.2.0",
+    "@typescript-eslint/parser": "^4.2.0",
+    "eslint": "^7.9.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-import-resolver-typescript": "^2.3.0",
+    "eslint-plugin-import": "^2.22.0",
+    "typescript": "^4.0.3"
+  },
   "dependencies": {
+    "@types/ws": "^7.2.7",
     "axios": "^0.19.2",
     "dotenv": "^8.2.0",
-    "pm2": "^4.4.0",
-    "websocket": "^1.0.31"
+    "file-system": "^2.2.2",
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.3.0",
+    "ws": "^7.3.1"
   }
 }
