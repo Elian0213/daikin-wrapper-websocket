@@ -21,20 +21,12 @@ Copy  ``config.example.json`` and rename it to ``config.json`` and change the **
 
 After that you need to install all the packages
 ````bash
-# If you use yarn
-yarn
-
-# Or if you're oldschool
-npm i
+$ yarn
 ````
 
 After all that you can run the script by typing
 ````bash
-# If you use yarn
-yarn dev
-
-# Or if you're oldschool
-npm run dev
+$ yarn dev
 ````
 
 # Usage
