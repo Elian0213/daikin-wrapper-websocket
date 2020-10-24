@@ -1,6 +1,9 @@
 # Daikin API Wrapper
 This was originally written for my Streamdeck Plugin that I made to control my AC with, but I figured it could be used in many use cases and applications.
 
+## API Explained
+[Please check this out, I made an attempt](https://github.com/Elian0213/daikin-wrapper-websocket/tree/master/src/types)
+
 ## Setup
 
 ### Config
@@ -9,10 +12,7 @@ Copy  ``config.example.json`` and rename it to ``config.json`` and change the **
 
 ```json
 {
-    // The port the websocket will run on
     "websocketPort": 3000,
-
-    // The IP Adress of your Daikin AC wifi module
     "daikinIP": "192.168.0.1"
 }
 ```
